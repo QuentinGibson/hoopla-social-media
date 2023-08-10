@@ -1,7 +1,6 @@
-import { Form, Link, useFetcher, useLoaderData } from "@remix-run/react";
+import { Form, Link, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import {
   DataFunctionArgs,
-  ErrorBoundaryComponent,
   json,
   LoaderArgs,
   redirect,
@@ -216,7 +215,8 @@ export const action = async ({ request }: DataFunctionArgs) => {
   }
 };
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary = () => {
+  const error: any = useRouteError()
   return (
     <div className="pt-36">
       <div className="flex flex-col items-center justify-center">

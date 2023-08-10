@@ -1,22 +1,17 @@
 import {
   DataFunctionArgs,
-  ErrorBoundaryComponent,
   LoaderArgs,
+  json
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import {
-  useActionData,
-  useCatch,
-  useFetchers,
+  useRouteError,
   useLoaderData,
 } from "@remix-run/react";
-import { useEffect } from "react";
 import invariant from "tiny-invariant";
 import { createComment } from "~/models/comment.server";
 import { getPost } from "~/models/post.server";
-import { useThemeContext, useToast } from "~/root";
+import { useThemeContext } from "~/root";
 import { getUser, requireUser } from "~/session.server";
-import { canBeOptimistic, useOptionalUser } from "~/utils";
 import Comment from "~/components/Comment";
 import LikeButton from "~/components/LikeButton";
 import NewComment from "~/components/NewComment";
@@ -39,8 +34,6 @@ export default function PostRoute() {
   const { post, like } = useLoaderData<typeof loader>();
   const themeContext = useThemeContext();
   const darkMood = themeContext.mood === "dark";
-  const { showToast } = useToast();
-  const actionData = useActionData();
   return (
     <main
       className={`${darkMood ? "text-white bg-black" : "text-black bg-white"
@@ -105,7 +98,8 @@ export const action = async ({ request }: DataFunctionArgs) => {
   }
 };
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary  = () => {
+  const error: any = useRouteError()
   return (
     <div className="pt-36">
       <div className="flex flex-col items-center justify-center">

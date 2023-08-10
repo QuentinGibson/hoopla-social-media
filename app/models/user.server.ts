@@ -4,7 +4,7 @@ import invariant from "tiny-invariant";
 
 import { prisma } from "~/db.server";
 import { validateEmail } from "~/utils";
-import { createDefaultTheme, populateTheme } from "./theme.server";
+import { createDefaultTheme } from "./theme.server";
 
 export type { User } from "@prisma/client";
 

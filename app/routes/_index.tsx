@@ -1,7 +1,6 @@
 import type {
   V2_MetaFunction,
   DataFunctionArgs,
-  ErrorBoundaryComponent,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -9,6 +8,7 @@ import {
   useActionData,
   useLoaderData,
   useSearchParams,
+  useRouteError
 } from "@remix-run/react";
 
 import { getPosts, getUserFeed } from "~/models/post.server";
@@ -114,7 +114,8 @@ export default function Index() {
   );
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary = () => {
+  const error: any = useRouteError()
   return (
     <div className="pt-36">
       <div className="flex justify-center items-center flex-col">

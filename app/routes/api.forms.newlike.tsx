@@ -1,5 +1,4 @@
 import {
-  ActionFunction,
   DataFunctionArgs,
   json,
   LoaderArgs,

@@ -7,17 +7,6 @@ import { useState } from "react";
 import TimeAgo from "react-timeago";
 import { useThemeContext } from "~/root";
 
-interface CommentProps {
-  id: number;
-  user: {
-    id: number;
-    name: string;
-    avatar: string;
-  };
-  createdAt: Date;
-  body: string;
-}
-
 interface Props {
   comment: any
 }

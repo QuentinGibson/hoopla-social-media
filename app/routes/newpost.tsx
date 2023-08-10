@@ -1,21 +1,21 @@
 /**
  * This is a TypeScript component that renders a form for creating a new post, including a file upload input, image preview, and loading indicators.
  */
-import { useFetcher } from "@remix-run/react";
-import { ErrorBoundaryComponent, json } from "@remix-run/server-runtime";
-import { redirect } from "@remix-run/node";
+import { useFetcher, useRouteError } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { requireUser } from "~/session.server";
+import { requireUser, requireUserId } from "~/session.server";
 import { MdImage } from "react-icons/md";
 import { useThemeContext, useToast } from "~/root";
-import { ActionFunction, LoaderFunction, UploadHandler } from "@remix-run/node";
-import {
+import { ActionFunction,
+  LoaderFunction,
+  UploadHandler,
+  redirect,
   unstable_parseMultipartFormData,
   unstable_composeUploadHandlers,
   unstable_createMemoryUploadHandler,
 } from "@remix-run/node";
 import { uploadImage } from "~/uploader-handler.server";
-import { requireUserId } from "~/session.server";
 import { createPost } from "~/models/post.server";
 import invariant from "tiny-invariant";
 import { canBeOptimistic } from "~/utils";
@@ -81,10 +81,10 @@ export default function NewPostRoute() {
             disabled={isLoading}
             required
             className={`${darkMood ? "bg-slate-100" : "bg-slate-200"
-              } w-96 rounded-lg  outline-none pl-2 text-base mt-4 leading-loose disabled:opacity-50`}
+} w-96 rounded-lg  outline-none pl-2 text-base mt-4 leading-loose disabled:opacity-50`}
             name="postTitle"
             type="text"
-          />
+            />
         </p>
         <label
           className={`${darkMood ? "text-white" : "text-black"} text-2xl`}
@@ -95,8 +95,8 @@ export default function NewPostRoute() {
         <button
           style={{ height: 430, width: 580 }}
           className={`${darkMood ? "bg-slate-100" : "bg-slate-200"
-            } relative flex justify-center items-center cursor-pointer ${previewUrl ? "img-preview" : "no-preview"
-            }`}
+} relative flex justify-center items-center cursor-pointer ${previewUrl ? "img-preview" : "no-preview"
+}`}
           disabled={isLoading}
           onClick={handleUpload}
         >
@@ -119,7 +119,7 @@ export default function NewPostRoute() {
               className="object-contain w-full h-full"
               src={previewUrl}
               alt="Preview Image"
-            />
+              />
           )}
         </button>
 
@@ -132,14 +132,14 @@ export default function NewPostRoute() {
           className="hidden w-1 h-1"
           onChange={handleChange}
           ref={fileRef}
-        />
+          />
         <div className="flex justify-start">
           <button
             type="submit"
             id="submit-button"
             disabled={isLoading}
             className={`${darkMood ? "text-white" : "text-black"
-              } px-3 py-1 rounded-lg disabled:opacity-50`}
+} px-3 py-1 rounded-lg disabled:opacity-50`}
             style={{ background: themeContext.accent }}
           >
             {isLoading ? "Creating..." : "Create Post"}
@@ -193,7 +193,8 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary = () => {
+  const error: any= useRouteError()
   return (
     <div className="pt-36">
       <div className="flex flex-col items-center justify-center">
@@ -205,7 +206,7 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
         </div>
         <div className="flex flex-col items-center justify-center h-24 px-8 py-4 text-white bg-red-800 rounded">
           Error Message:
-          <span className="mt-2 text-base">{error.message}</span>
+          {error.message && <span className="mt-2 text-base">{error.message}</span> }
         </div>
       </div>
     </div>

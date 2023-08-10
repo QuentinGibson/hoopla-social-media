@@ -21,10 +21,6 @@ interface Post {
 
 }
 
-interface ItemProps {
-  post: Post,
-  like: boolean
-}
 
 const Item = ({
   post: { id, title, image, likes, createdAt, comments, user },

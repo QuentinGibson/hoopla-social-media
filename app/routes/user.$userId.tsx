@@ -1,8 +1,8 @@
 /**
  * This is a React component that displays information about a user, including their avatar, name, number of posts and comments, and a history of their posts and comments in separate tabs.
  */
-import { ErrorBoundaryComponent, json, LoaderArgs } from "@remix-run/node";
-import { Link, useCatch, useLoaderData } from "@remix-run/react";
+import { json, LoaderArgs } from "@remix-run/node";
+import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { getUserProfileById } from "~/models/user.server";
 import * as React from "react";
@@ -184,7 +184,8 @@ function a11yProps(index: number) {
   };
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary = () => {
+  const error: any = useRouteError()
   return (
     <div className="pt-36">
       <div className="flex flex-col items-center justify-center">

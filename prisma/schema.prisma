@@ -8,19 +8,104 @@ generator client {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String    @unique
+  avatar    String    @default("https://res.cloudinary.com/demo/image/upload/c_thumb,g_auto:classic,h_175,w_175/v1551428220/veducate/spencer-backman-482079-unsplash.jpg")
+  isAdmin   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  password  Password?
+  posts     Post[]
+  seens     Seen[]
+  likes     Like[]
+  comments  Comment[]
+  settings  UserSettings?
+  blockedPosts BlockedPost[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  password Password?
 }
 
 model Password {
-  hash String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  hash   String
   userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Post {
+  id        String @id @default(cuid())
+  title     String
+  image     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User   @relation(fields: [userId],  references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  seens     Seen[]
+  likes     Like[]
+  comments  Comment[]
+  blockedPosts BlockedPost[]
+}
+
+model Seen {
+  id        String @id @default(cuid())
+  createdAt DateTime  @default(now())
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post      Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  postId    String
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id      String @id @default(cuid())
+  createdAt DateTime  @default(now())
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post    Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  body    String
+  userId  String
+  postId  String
+}
+
+model Like {
+  id      String @id @default(cuid())
+  createdAt DateTime  @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+  postId String
+  @@unique([userId, postId])
+}
+
+model UserSettings {
+  id           String @id @default(cuid())
+  language     String?
+  layout       String?
+  notifications Boolean?
+  privacy      String?
+  accessibility String?
+  theme         Theme @relation(fields: [themeId], references: [id])
+  themeId       String
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId       String @unique
+}
+
+model BlockedPost {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  @@unique([userId, postId])
+}
+
+model Theme {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  primary   String
+  secondary String
+  accent    String
+  accent2   String
+  mood      String
+  settings  UserSettings[] 
+
+}

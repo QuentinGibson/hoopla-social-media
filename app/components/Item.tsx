@@ -1,7 +1,7 @@
 /**
  * This code is a React functional component that displays an item / post.
  */
-import TimeAgo from "react-timeago";
+import TimeAgo from "react-time-ago";
 import { usePopper } from "react-popper";
 import { RiMore2Fill } from "react-icons/ri";
 import { Link, useFetcher, useSearchParams } from "@remix-run/react";

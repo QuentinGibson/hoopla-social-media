@@ -4,7 +4,7 @@ A component that renders a single comment in a list of comments.
 */
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import TimeAgo from "react-timeago";
+import TimeAgo from "react-time-ago";
 import { useThemeContext } from "~/root";
 
 interface Props {

@@ -19,6 +19,14 @@ import { getTheme } from "./models/theme.server";
 import invariant from "tiny-invariant";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en'
+import et from 'javascript-time-ago/locale/et'
+
+TimeAgo.addDefaultLocale(en)
+TimeAgo.addLocale(et)
+
 
 export const links: LinksFunction = () => {
   const reactToastify =
@@ -97,7 +105,7 @@ export default function App() {
         <body className={`h-full`}>
           <ToastProvider>
             <>
-              <div className="grid grid-rows-[auto_auto]">
+              <div className="grid grid-rows-[auto_1fr] h-full">
                 <SiteHeader />
                 <Outlet />
               </div>

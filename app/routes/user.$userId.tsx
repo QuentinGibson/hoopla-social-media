@@ -10,7 +10,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import TimeAgo from "react-timeago";
+import TimeAgo from "react-time-ago";
 import { useThemeContext } from "~/root";
 
 interface TabPanelProps {
@@ -69,7 +69,7 @@ export default function UserRoute() {
               to={`/posts/${post.id}`}
             >
               <span className="font-semibold">
-                {post.title} - <TimeAgo date={post.createdAt} />
+                {post.title} - <TimeAgo date={Number(post.createdAt)} />
               </span>
             </Link>
           );

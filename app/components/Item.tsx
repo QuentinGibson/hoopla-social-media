@@ -10,17 +10,6 @@ import LikeButton from "./LikeButton";
 import { useThemeContext } from "~/root";
 import { Avatar } from "@mui/material";
 
-interface Post {
-  id: string
-  title: string
-  image: string
-  likes: any
-  createdAt: Date
-  comments: any
-  user: any
-
-}
-
 
 const Item = ({
   post: { id, title, image, likes, createdAt, comments, user },

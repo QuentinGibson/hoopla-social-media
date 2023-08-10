@@ -4,18 +4,6 @@ describe("smoke tests", () => {
     cy.cleanupUser();
   });
 
-  it("shows the user details", () => {
-    cy.login();
-    cy.visitAndCheck("/");
-
-    cy.visit("/settings");
-    cy.wait(1000);
-    cy.get("#view-profile").click();
-    cy.wait(1000);
-    // Replace the selectors with the actual selectors for the elements that detail the user
-    cy.get("#user-name").should("include.text", ""); // checks that the user's name is displayed
-    cy.get("#user-avatar").should("have.attr", "src"); // checks that the user's avatar is displayed with the correct URL
-  });
   it("should allow you to register and login", () => {
     const loginForm = {
       email: `${faker.internet.userName()}@example.com`,
@@ -33,8 +21,23 @@ describe("smoke tests", () => {
     cy.findByLabelText(/name/i).type(loginForm.name);
     cy.findByRole("button", { name: /create account/i }).click();
 
-    cy.findByRole("button", { name: /logout/i }).click();
+    cy.get('button[type="submit"]')
+      .should('contain', 'Logout')
+      .click();
     cy.findByRole("link", { name: /login/i });
+  });
+
+  it("shows the user details", () => {
+    cy.login();
+    cy.visitAndCheck("/");
+
+    cy.visit("/settings");
+    cy.wait(1000);
+    cy.get("#view-profile").click();
+    cy.wait(1000);
+    // Replace the selectors with the actual selectors for the elements that detail the user
+    cy.get("#user-name").should("include.text", ""); // checks that the user's name is displayed
+    cy.get("#user-avatar").should("have.attr", "src"); // checks that the user's avatar is displayed with the correct URL
   });
 
   it("should contain a list of previous posts", () => {

@@ -126,7 +126,7 @@ export default function Join() {
           </div>
           <div className="mt-1">
             <label
-              htmlFor="email"
+              htmlFor="name"
               className="block text-sm font-medium text-gray-700"
             >Name</label>
             <input

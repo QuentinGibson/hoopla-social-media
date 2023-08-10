@@ -12,7 +12,7 @@ async function uploadImage(data: AsyncIterable<Uint8Array>) {
   const uploadPromise: Promise<UploadApiResponse> =
     new Promise<UploadApiResponse>(async (resolve, reject) => {
       const uploadStream = cloudinary.v2.uploader.upload_stream(
-        { folder: "groupme-socialmedia-uploads" },
+        { folder: "hoopla" },
         (error, result) => {
           if (error) {
             reject(error);

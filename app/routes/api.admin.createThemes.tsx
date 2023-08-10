@@ -1,5 +1,6 @@
-import { DataFunctionArgs, redirect } from "@remix-run/node";
-import { populateTheme } from "~/models/theme.server";
+import type { DataFunctionArgs} from '@remix-run/node'
+import {  redirect } from "@remix-run/node";
+import { createDefaultThemes } from "~/models/theme.server";
 import { requireUser } from "~/session.server";
 /**
  * Performs an action that populates the theme and redirects the user to the home page if they are an admin.
@@ -19,7 +20,7 @@ export const action = async ({ request }: DataFunctionArgs) => {
     const user = await requireUser(request);
     if (!user) redirect("/login", { status: 302 });
     if (!user.isAdmin) redirect("/", { status: 302 });
-    await populateTheme();
+    await createDefaultThemes();
     return redirect("/", { status: 204 });
   } catch (error) {
     return { redirect: "/login", status: 302 };

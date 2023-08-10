@@ -4,7 +4,7 @@ import invariant from "tiny-invariant";
 
 import { prisma } from "~/db.server";
 import { validateEmail } from "~/utils";
-import { createDefaultTheme } from "./theme.server";
+import { createDefaultThemes } from "./theme.server";
 
 export type { User } from "@prisma/client";
 
@@ -63,16 +63,16 @@ export async function createUser(
   password: string,
   name: User["name"]
 ) {
+  const isAdmin = email === "quent@example.com";
   const hashedPassword = await bcrypt.hash(password, 10);
-
   let defaultTheme;
   try {
     defaultTheme = await prisma.theme.findFirstOrThrow();
   } catch (error) {
-    defaultTheme = await createDefaultTheme();
+    await createDefaultThemes();
+    defaultTheme = await prisma.theme.findFirstOrThrow();
   }
 
-  const isAdmin = email === "quent@example.com";
 
   return prisma.user.create({
     data: {

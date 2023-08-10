@@ -1,21 +1,13 @@
 import { prisma } from "~/db.server";
 
 /**
- * Creates a new default theme with pre-defined colors and mood.
- *
- * @async
- * @function
- * @returns {Promise<Theme>} - A Promise that resolves to the newly created Theme object.
+ * Creates a new default themes with pre-defined colors and mood.
+ * Populates the database with default theme data if the purple theme is not found.
+ * Themes added: purple, azure, jasmine, ruby, dark
+ * @returns {Promise<void>}
  */
-export async function createDefaultTheme() {
-  const purpleTheme = await prisma.theme.findFirst({
-    where: {name: "purple"}
-  })
-  if (!purpleTheme) {
-    await populateTheme()
-  }
-
-  return await prisma.theme.create({
+export async function createDefaultThemes() {
+  await prisma.theme.create({
     data: {
       name: "default",
       primary: "hsl(165, 23%, 65%)",
@@ -25,18 +17,7 @@ export async function createDefaultTheme() {
       mood: "light",
     },
   });
-}
 
-/**
- * Populates the database with default theme data if the purple theme is not found.
- * Themes added: purple, azure, jasmine, ruby, dark
- * @returns {Promise<void>}
- */
-export async function populateTheme() {
-  const purpleTheme = await prisma.theme.findFirst({
-    where: { name: "purple" },
-  });
-  if (!purpleTheme) return;
   await prisma.theme.create({
     data: {
       name: "purple",
@@ -89,6 +70,7 @@ export async function populateTheme() {
   });
 }
 
+
 /**
  * Retrieves the user's theme from the database, or returns the default theme if no user is found.
  * @param {string} userId - The ID of the user whose theme is being retrieved.
@@ -104,9 +86,14 @@ export async function getTheme(userId: string) {
   if (!user) {
     theme = await prisma.theme.findFirst({ where: { name: "default" } });
     if (!theme) {
-      theme = await createDefaultTheme();
+      await createDefaultThemes();
     }
-    return theme;
+    return await prisma.theme.findFirst({ where: { name: "default" } });
+  }
+
+  theme = await prisma.theme.findFirst({ where: { name: "default" } });
+  if (!theme) {
+      await createDefaultThemes();
   }
   theme = await prisma.theme.findFirst({
     where: { id: user?.settings?.themeId },

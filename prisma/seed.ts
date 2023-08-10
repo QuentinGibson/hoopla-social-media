@@ -73,7 +73,7 @@ async function seed() {
   };
   const createComments = async (postId: string) => {
     const generateCommentMessage = () => {
-      const sentenceCount = faker.datatype.number({ min: 1, max: 3 }); // Generate 1-3 sentences
+      const sentenceCount = faker.number.int({ min: 1, max: 3 }); // Random int from 1-3
       let commentMessage = faker.lorem.sentence(); // Generate first sentence
 
       // Generate additional sentences and concatenate them to form the comment message
